@@ -1,13 +1,29 @@
-import React from 'react'
+import type { KeyboardEvent } from 'react'
+import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { SearchIcon } from '@chakra-ui/icons'
-import { Box, chakra, useDisclosure, useEventListener, useUpdateEffect, Modal, ModalOverlay, ModalContent, Flex, Center, ModalBody } from '@chakra-ui/react';
-import { findAll } from 'highlight-words-core';
+import {
+  Box,
+  chakra,
+  useDisclosure,
+  useEventListener,
+  useUpdateEffect,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  Flex,
+  Center,
+  ModalBody,
+  HTMLChakraProps,
+} from '@chakra-ui/react'
+import { findAll } from 'highlight-words-core'
 import { matchSorter } from 'match-sorter'
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/router'
 import MultiRef from 'react-multi-ref'
 import searchData from 'configs/search-meta.json'
-import { SearchButton } from './algolia-search';
-import Link from 'next/link';
+import { SearchButton } from './algolia-search'
+import Link from 'next/link'
+import scrollIntoView from 'scroll-into-view-if-needed'
+import { useDebounce } from 'src/hooks/use-debounce'
 
 interface OptionTextProps {
   searchWords: string[]
@@ -15,30 +31,41 @@ interface OptionTextProps {
 }
 
 function OptionText({ searchWords, textToHighlight }: OptionTextProps) {
-  const chunks = findAll({
+  const chunks: any[] = findAll({
     searchWords,
     textToHighlight,
     autoEscape: true,
   })
 
-  const highlightedText = chunks.map(chunk => {
-    const { end, highlight, start } = chunk
-    const text = textToHighlight.substring(start, end - start)
-    if (highlight) {
-      return (
-        <Box as='mark' bg='transparent' color='teal.500'>
-          {text}
-        </Box>
-      )
-    } else {
-      return text
-    }
-  })
-
-  return highlightedText
+  return (
+    <>
+      {chunks.map((chunk, index) => {
+        const { end, highlight, start } = chunk
+        const text = textToHighlight.substring(start, end - start)
+        if (highlight) {
+          return (
+            <Box
+              key={'chunk_highlight_' + index}
+              as='mark'
+              bg='transparent'
+              color='teal.500'
+            >
+              {text}
+            </Box>
+          )
+        } else {
+          return (
+            <Box as='span' key={'chunk_' + index}>
+              {text}
+            </Box>
+          )
+        }
+      })}
+    </>
+  )
 }
 
-function DocIcon(props) {
+function DocIcon(props: HTMLChakraProps<'svg'>) {
   return (
     <chakra.svg
       strokeWidth='2px'
@@ -58,7 +85,7 @@ function DocIcon(props) {
   )
 }
 
-function EnterIcon(props) {
+function EnterIcon(props: HTMLChakraProps<'svg'>) {
   return (
     <chakra.svg
       strokeWidth='2px'
@@ -81,7 +108,7 @@ function EnterIcon(props) {
   )
 }
 
-function HashIcon(props) {
+function HashIcon(props: HTMLChakraProps<'svg'>) {
   return (
     <chakra.svg
       strokeWidth='2px'
@@ -104,23 +131,25 @@ function HashIcon(props) {
 
 function OmniSearch() {
   const router = useRouter()
-  const [query, setQuery] = React.useState('')
-  const [active, setActive] = React.useState(0)
-  const [shouldCloseModal, setShouldCloseModal] = React.useState(true)
+  const [query, setQuery] = useState('')
+  const [active, setActive] = useState(0)
+  const [shouldCloseModal, setShouldCloseModal] = useState(true)
   const menu = useDisclosure()
   const modal = useDisclosure()
-  const [menuNodes] = React.useState(() => new MultiRef<number, HTMLElement>())
-  const menuRef = React.useRef<HTMLDivElement>(null)
-  const eventRef = React.useRef<'mouse' | 'keyboard'>(null)
+  const [menuNodes] = useState(() => new MultiRef<number, HTMLElement>())
+  const menuRef = useRef<HTMLDivElement>(null)
+  const eventRef = useRef<'mouse' | 'keyboard'>(null)
 
-  React.useEffect(() => {
+  const queryDebounce = useDebounce(query);
+
+  useEffect(() => {
     router.events.on('routeChangeComplete', modal.onClose)
     return () => {
       router.events.off('routeChangeComplete', modal.onClose)
     }
-  }, [])
+  }, [modal.onClose, router.events])
 
-  // React hooks to manage the event listener
+  // hooks to manage the event listener
   useEventListener('keydown', (event) => {
     const isMac = /(Mac|iPhone|iPod|iPad)/i.test(navigator?.platform)
     const hotKey = isMac ? 'metaKey' : 'ctrlKey'
@@ -130,22 +159,25 @@ function OmniSearch() {
     }
   })
 
-  React.useEffect(() => {
-    if (modal.isOpen && query.length > 0) {
-      setQuery('')
-    }
-  }, [modal.isOpen])
+  // Why do we need this???
+  // useEffect(() => {
+  //   if (modal.isOpen && query.length > 0) {
+  //     setQuery('')
+  //   }
+  // }, [modal.isOpen, query.length])
 
-  const results = React.useMemo(
+  const results = useMemo(
     function getResults() {
-      if (query.length < 2) return []
-      return matchSorter(searchData, query, {
+      if (queryDebounce.length < 2) return []
+      return matchSorter(searchData, queryDebounce, {
         keys: ['hierarchy.lvl1', 'hierarchy.lvl2', 'hierarchy.lvl3', 'content'],
       }).slice(0, 20)
-    }, [query])
+    },
+    [queryDebounce],
+  )
 
-  const onKeyDown = React.useCallback(
-    (e: React.KeyboardEvent) => {
+  const onKeyDown = useCallback(
+    (e: KeyboardEvent) => {
       eventRef.current = 'keyboard'
 
       switch (e.key) {
@@ -175,13 +207,15 @@ function OmniSearch() {
             break
           }
           modal.onClose()
+          // Go to specified Route
           router.push(results[active].url)
         }
       }
-    }, [active, modal, results, router],
+    },
+    [active, modal, results, router],
   )
 
-  const onKeyUp = React.useCallback((e: React.KeyboardEvent) => {
+  const onKeyUp = useCallback((e: KeyboardEvent) => {
     eventRef.current = 'keyboard'
     switch (e.key) {
       case 'Control':
@@ -195,15 +229,22 @@ function OmniSearch() {
 
   useUpdateEffect(() => {
     setActive(0)
-  }, [query])
+  }, [queryDebounce])
 
   useUpdateEffect(() => {
     if (!menuRef.current || eventRef.current === 'mouse') return
     const node = menuNodes.map.get(active)
-  })
+    if (!node) return
+    scrollIntoView(node, {
+      scrollMode: 'if-needed',
+      block: 'nearest',
+      inline: 'nearest',
+      boundary: menuRef.current,
+    })
+  }, [active])
 
   // Helper for 'open' condition
-  const open = menu.isOpen && results.length > 0;
+  const open = menu.isOpen && results.length > 0
 
   return (
     <>
@@ -229,21 +270,23 @@ function OmniSearch() {
             <chakra.input
               aria-autocomplete='list'
               autoComplete='off'
+              autoCorrect='off'
               spellCheck='false'
               maxLength={64}
               sx={{
                 w: '100%',
-                h: '100%',
+                h: '68px',
                 pl: '68px',
                 fontWeight: 'medium',
                 outline: 0,
                 bg: 'white',
-                '.chakra-ui-dark &': { bg: 'gray.700' }
+                '.chakra-ui-dark &': { bg: 'gray.700' },
               }}
               placeholder='Search the docs'
               value={query}
               onChange={(e) => {
-                setQuery(e.target.value)
+                const text = e.target.value;
+                setQuery(text)
                 menu.onOpen()
               }}
               onKeyDown={onKeyDown}
@@ -253,11 +296,7 @@ function OmniSearch() {
               <SearchIcon color='teal.500' boxSize='20px' />
             </Center>
           </Flex>
-          <ModalBody
-            maxH='66vh'
-            p='0'
-            ref={menuRef}
-          >
+          <ModalBody maxH='66vh' p='0' ref={menuRef}>
             {open && (
               <Box
                 sx={{
@@ -297,7 +336,7 @@ function OmniSearch() {
                               mt: 2,
                               px: 4,
                               py: 2,
-                              rouneded: 'lg',
+                              rounded: 'lg',
                               bg: 'gray.100',
                               '.chakra-ui-dark &': { bg: 'gray.600' },
                               _selected: {
@@ -306,21 +345,35 @@ function OmniSearch() {
                                 mark: {
                                   color: 'white',
                                   textDecoration: 'underline',
-                                }
+                                },
                               },
                             }}
                           >
-                            {isLvl1 ? (<DocIcon opacity={0.4} />) : (<HashIcon opacity={0.4} />)}
+                            {isLvl1 ? (
+                              <DocIcon opacity={0.4} />
+                            ) : (
+                              <HashIcon opacity={0.4} />
+                            )}
 
                             <Box flex='1' ml='4'>
-                              {!isLvl1 && (<Box fontWeight='medium' fontSize='xs' opacity={0.7}>{item.hierarchy.lvl1}</Box>)}
+                              {!isLvl1 && (
+                                <Box
+                                  fontWeight='medium'
+                                  fontSize='xs'
+                                  opacity={0.7}
+                                >
+                                  {item.hierarchy.lvl1}
+                                </Box>
+                              )}
                               <Box fontWeight='semibold'>
                                 <OptionText
-                                  searchWords={[query]}
+                                  searchWords={[queryDebounce]}
                                   textToHighlight={item.content}
                                 />
                               </Box>
                             </Box>
+
+                            <EnterIcon opacity={0.5} />
                           </Box>
                         </a>
                       </Link>

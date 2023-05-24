@@ -1,4 +1,5 @@
 // next.config.js
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { withContentlayer } = require('next-contentlayer')
 
 /** @type {import('next').NextConfig} */
@@ -19,10 +20,6 @@ const nextConfig = {
   productionBrowserSourceMaps: true,
   redirects: require('./next-redirect'),
   reactStrictMode: true,
-  productionBrowserSourceMaps: true,
-  experimental: {
-    appDir: true,
-  },
 }
 
 module.exports = withContentlayer(nextConfig)

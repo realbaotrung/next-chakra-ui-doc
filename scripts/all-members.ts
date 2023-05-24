@@ -1,6 +1,6 @@
-import { config } from 'dotenv'
+import {promises as fs} from 'fs';
 import { Octokit } from 'octokit'
-import fs from 'fs';
+import { config } from 'dotenv'
 
 /**
  * Purpose:
@@ -20,7 +20,7 @@ const FILE_NAME = '.all-membersrc'
 function sortMembers(a: any, b: any) {
   // segun comes first
   if (a.login === 'segunadebayo') return -1;
-  if (a.login === 'segunadebayo') return 1;
+  if (b.login === 'segunadebayo') return 1;
 
   // everything else is alphabetical by login
   return a.login.localeCompare(b.login, 'en')
@@ -83,7 +83,7 @@ async function getMembers() {
   }
 
   // after get list of information of all users, write it into file
-  fs.writeFileSync(FILE_NAME, JSON.stringify(result, null, 2))
+  await fs.writeFile(FILE_NAME, JSON.stringify(result, null, 2))
 }
 
 try {

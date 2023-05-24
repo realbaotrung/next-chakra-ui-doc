@@ -61,7 +61,11 @@
       "sponsor-the-chakra-ui-maintainers": "Sponsor the Chakra UI maintainers",
       "sponsor-the-creator": "Sponsor the creator, Segun Adebayo",
       "organization-sponsors": "Organization Sponsors 🏦",
-      "individual-sponsors": "Individual Sponsors 🥇"
+      "individual-sponsors": "Individual Sponsors 🥇",
+      "sponsor": "sponsor",
+      "open-collective-title": "Open Collective",
+      "patreon-title": "Patreon"
+
     },
     "event-section": {
       "title": "Invite us to speak at your next event",
@@ -137,7 +141,7 @@
       "home-page-ad": {
         "premium-components": "Premium components",
         "new": "New",
-        "build-fasler": "Build faster",
+        "build-faster": "Build faster",
         "with-chakra-ui-pro": "with Chakra UI Pro 💎",
         "description": "Beautiful and responsive React components to build your application or marketing pages quicker.",
         "learn-more": "Learn more"
