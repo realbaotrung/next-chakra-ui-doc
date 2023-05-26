@@ -10,7 +10,7 @@ import {
 } from '@codesandbox/sandpack-react'
 import { nightOwl } from '@codesandbox/sandpack-themes'
 
-type SandpackEmbedProps = {
+export type SandpackEmbedProps = {
   dependencies?: Record<string, string>
   devDependencies?: Record<string, string>
   layoutOptions?: SandpackLayoutProps

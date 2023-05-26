@@ -5,8 +5,16 @@ import { t } from 'utils/i18n'
 export default function EditPageLink({ href }: { href?: string }) {
   return (
     <Link href={href} isExternal>
-      <Stack>
-        <Icon as={MdEdit} mr='1'/>
+      <Stack
+        fontSize='sm'
+        textAlign='right'
+        display='inline-flex'
+        direction='row'
+        spacing={1}
+        align='center'
+        opacity={0.7}
+      >
+        <Icon as={MdEdit} mr='1' />
         <chakra.span>
           {t('component.edit-page-button.edit-this-page')}
         </chakra.span>

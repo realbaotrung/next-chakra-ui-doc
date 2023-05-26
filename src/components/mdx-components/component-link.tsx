@@ -21,6 +21,7 @@ type ComponentLinkProps = {
 function ComponentLink(props: ComponentLinkProps) {
   const { icon: BtnIcon, url, children, iconSize, iconColor, ...rest } = props
   return (
+    // TODO: consider this Button as Link(Chakra) approach
     <Button
       as={Link}
       href={url}
@@ -98,6 +99,7 @@ export default function ComponentLinks({
     </ComponentLink>
   )
 
+  // Note: Currently an unused component
   const storybookLink = storybook?.url && (
     <ComponentLink
       url={storybook.url}
@@ -141,5 +143,4 @@ export default function ComponentLinks({
       {videoLink}
     </Wrap>
   )
-
 }

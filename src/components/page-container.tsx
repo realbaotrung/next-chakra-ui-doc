@@ -43,7 +43,7 @@ interface PageContainerProps {
 export default function PageContainer({
   frontmatter,
   hideToc,
-  maxWidth,
+  maxWidth='48rem',
   children,
   leftSidebar,
   rightSidebar,
@@ -95,10 +95,14 @@ export default function PageContainer({
                         v{version}
                       </Badge>
                     )}
+                    {/* ------------ Content of Markdown ------------- */}
                     {children}
+                    {/* ------------ Content of Markdown ------------- */}
                     <Box mt='40px'>
                       <Box>{editUrl && <EditPageLink href={editUrl} />}</Box>
+                      {/* ------------ Pagination of Markdown ------------- */}
                       {pagination || null}
+                      {/* ------------ Pagination of Markdown ------------- */}
                     </Box>
                     <Box pb='20'>
                       <Footer />

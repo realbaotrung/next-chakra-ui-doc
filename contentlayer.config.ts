@@ -21,7 +21,7 @@ const computedFields: ComputedFields = {
 
 /** Guides  - Document type */
 const Guides = defineDocumentType(() => ({
-  name: "Guides",
+  name: "Guide",
   filePathPattern: "getting-started/**/*.mdx",
   contentType: "mdx",
   fields: {

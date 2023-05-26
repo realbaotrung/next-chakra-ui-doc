@@ -21,13 +21,20 @@ export default function CodeBlock(props) {
   )
 
   const {
-    className, live = true, manual, render, children, viewLines, ln, mountStylesheet = false
+    className,
+    live = true,
+    manual,
+    render,
+    children,
+    viewLines,
+    ln,
+    mountStylesheet = false,
   } = props.children.props
 
   const _live = live === 'true' || live === true
 
-  const language = className?.replace(/language/, '')
-  const rawCode = children.trim();
+  const language = className?.replace(/language-/, '')
+  const rawCode = children.trim()
 
   const reactLiveBlockProps = {
     rawCode,

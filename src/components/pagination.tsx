@@ -1,7 +1,7 @@
 import NextLink from 'next/link'
 import { ReactNode } from 'react'
 import { Link, Text, LinkProps, SimpleGrid, HTMLChakraProps } from '@chakra-ui/react'
-import { ChevronLeftIcon } from '@chakra-ui/icons'
+import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons'
 import { RouteItem } from 'utils/get-route-context'
 
 const PaginationLink = (
@@ -66,7 +66,7 @@ export default function Pagination({ previous, next, ...rest }: PaginationProps)
           rel='next'
         >
           {next.title}
-          <ChevronLeftIcon mr='1' fontSize='1.2em' />
+          <ChevronRightIcon mr='1' fontSize='1.2em' />
         </PaginationLink>
       ) : (
         <div />

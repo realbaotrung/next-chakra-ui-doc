@@ -16,7 +16,7 @@ import {
 } from '@codesandbox/sandpack-react'
 import { nightOwl } from '@codesandbox/sandpack-themes'
 
-interface CodeBlockProps {
+export interface CodeBlockProps {
   path: string
   code: string
   language: SandpackLanguageSupport

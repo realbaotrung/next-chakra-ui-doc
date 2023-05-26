@@ -44,7 +44,12 @@ interface MDXLayoutProps {
   maxWidth?: string
 }
 
-export default function MDXLayout({ frontmatter, children, hideToc, maxWidth }: MDXLayoutProps) {
+export default function MDXLayout({
+  frontmatter,
+  children,
+  hideToc,
+  maxWidth,
+}: MDXLayoutProps) {
   const routes = getRoutes(frontmatter.slug)
   const route = findRouteByPath(removeFromLast(frontmatter.slug, '#'), routes)
   const routeContext = getRouteContext(route, routes)
@@ -66,5 +71,3 @@ export default function MDXLayout({ frontmatter, children, hideToc, maxWidth }: 
     </PageContainer>
   )
 }
-
-

@@ -11,10 +11,11 @@ import { FrontmatterHeading } from 'src/types/frontmatter'
 import { t } from 'utils/i18n'
 import TocNav from './toc-nav'
 import FigmaPluginAd from './figma-plugin-ad'
+import { useMemo } from 'react'
 
-interface TableOfContentProps extends BoxProps {
+type TableOfContentProps = {
   headings: FrontmatterHeading[]
-}
+} & BoxProps
 
 /**
  * The Right Content of current page
@@ -26,12 +27,15 @@ export default function TableOfContent({
   headings,
   ...rest
 }: TableOfContentProps) {
-  const activeId = useScrollSpy(
-    headings.map(({ id }) => `[id="${id}"]`),
-    {
-      rootMargin: '0% 0% -24% 0%',
-    },
-  )
+  const headingIds = useMemo(() => {
+    return headings.map(({ id }) => `[id="${id}"]`)
+  }, [headings])
+
+  const activeId = useScrollSpy(headingIds, {
+    // The Bottom of root margin should be '-70%', if not,
+    // the table of content will have the undesirable, the wrong activeId
+    rootMargin: '0% 0% -70% 0%',
+  })
 
   const linkColor = useColorModeValue('gray.600', 'gray.400')
   const linkHoverColor = useColorModeValue('gray.900', 'gray.600')

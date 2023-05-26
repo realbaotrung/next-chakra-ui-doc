@@ -16,7 +16,7 @@ import { convertBackticksToInlineCode } from 'utils/convert-backticks-to-inline-
 import { useRouter } from 'next/router'
 import NextLink from 'next/link'
 import { BsFillGridFill } from 'react-icons/bs'
-import { FaCompass, FaGlobe, FaPalette } from 'react-icons/fa'
+import { FaCompass, FaGlobe, FaPalette, FaTools } from 'react-icons/fa'
 import { FiFigma } from 'react-icons/fi'
 import { AiFillPlayCircle } from 'react-icons/ai'
 
@@ -135,6 +135,7 @@ const MainNavLink = ({
 }: MainNavLinkProps) => {
   const router = useRouter()
   const active = router.asPath.startsWith(href) || !!isActive
+
   return (
     <NextLink href={href} passHref>
       <HStack
@@ -151,12 +152,13 @@ const MainNavLink = ({
           h='6'
           borderWidth='1px'
           bg={active ? 'accent-static' : 'transparent'}
+          borderColor={active ? 'accent-static' : undefined}
           rounded='base'
           color={active ? 'white' : 'accent'}
         >
           {icon}
-          <span>{children}</span>
         </Center>
+        <span>{children}</span>
       </HStack>
     </NextLink>
   )
@@ -180,6 +182,13 @@ export const mainNavLinks = [
     icon: <BsFillGridFill />,
     href: '/docs/components',
     label: 'Components',
+  },
+  {
+    icon: <FaTools />,
+    href: '/docs/hooks/use-boolean',
+    label: 'Hooks',
+    match: (asPath: string, href: string) =>
+      href.startsWith('/docs/hooks') && asPath.startsWith('/docs/hooks')
   },
   {
     icon: <FiFigma />,
@@ -252,7 +261,7 @@ function Sidebar({ routes }: { routes: RouteItem[] }) {
       overflowY='auto'
       className='sidebar-content'
       flexShrink={0}
-      display={{ base: 'none', md: 'block'}}
+      display={{ base: 'none', md: 'block' }}
     >
       <MainNavLinkGroup mb='10' />
       <SidebarContent routes={routes} pathname={pathname} contentRef={ref} />

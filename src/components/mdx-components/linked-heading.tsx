@@ -10,6 +10,11 @@ export default function LinkedHeading(props: LinkedHeadingProps) {
         {...props}
       >
       <span className='content'>{props.children}</span>
+
+      {/* ------------------------------------------------------------ */}
+      {/* Hashtag as Link - Related to Table of Contents on the right
+        * of the Page */}
+      {/* ------------------------------------------------------------ */}
       {props.id && (
         <chakra.a
           aria-label='anchor'
@@ -22,7 +27,7 @@ export default function LinkedHeading(props: LinkedHeadingProps) {
           ml='0.375'
           href={`#${props.id}`}
         >
-          #
+          {' '} #
         </chakra.a>
       )}
     </chakra.h2>

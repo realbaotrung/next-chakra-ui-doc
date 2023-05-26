@@ -1,26 +1,31 @@
 import * as Chakra from '@chakra-ui/react'
-import {
-  HTMLChakraProps,
-  Alert,
-  AspectRatio,
-  Box,
-  chakra,
-  Kbd,
-  Link,
-} from '@chakra-ui/react'
+import { HTMLChakraProps } from '@chakra-ui/react'
 import NextImage, { ImageProps } from 'next/image'
 import { FiFigma } from 'react-icons/fi'
 import LinkedHeading, { LinkedHeadingProps } from './linked-heading'
 import InlineCode from './inline-code'
 import { Pre } from './pre'
-import { ReactElement, ReactNode } from 'react'
-import TutorialCodeBlock from 'components/tutorial/tutorial-code-block'
+import TutorialCodeBlock, {
+  CodeBlockProps,
+} from 'components/tutorial/tutorial-code-block'
 import CodeBlock from './codeblock/codeblock'
 import { TData, THead, Table } from './table'
 import { Anchor } from './anchor'
 import { CarbonAd } from './carbon-ad'
 import ComponentLinks from './component-link'
 import IconList from './icons-list'
+import FrameworkLinks from '../framework-link'
+import PropsTable from '../props-table'
+import VideoPlayer from './video-player'
+import { ColorPalette, ColorPalettes, ColorWrapper } from '../color-palette'
+import FeaturesCourses from './features-courses'
+import JoinCommunityCards from '../community-card'
+import SandpackEmbed, { SandpackEmbedProps } from 'components/sandpack-embed'
+import FeaturesOverview from '../features-overview'
+import TutorialFileAction from '../tutorial/tutorial-file-action'
+import PackageManagers from 'components/package-managers'
+
+const { Alert, AspectRatio, Box, chakra, Kbd, Link } = Chakra
 
 type MDXComponentsImageProps = {
   ratio: number
@@ -59,22 +64,22 @@ export const MDXComponents = {
     <LinkedHeading apply='mdx.h2' {...props} />
   ),
   h3: (props: LinkedHeadingProps) => (
-    <LinkedHeading as='h3' apply='mdx.h2' {...props} />
+    <LinkedHeading as='h3' apply='mdx.h3' {...props} />
   ),
   h4: (props: LinkedHeadingProps) => (
-    <LinkedHeading as='h4' apply='mdx.h3' {...props} />
+    <LinkedHeading as='h4' apply='mdx.h4' {...props} />
   ),
   hr: (props: HTMLChakraProps<'hr'>) => <chakra.hr apply='mdx.hr' {...props} />,
   strong: (props: HTMLChakraProps<'strong'>) => (
     <Box as='strong' fontWeight='semibold' {...props} />
   ),
   code: InlineCode,
-  pre: (props) => {
+  pre: (props: HTMLChakraProps<'pre'> | CodeBlockProps | any) => {
     if (typeof props.children === 'string') return <Pre {...props} />
     if ((props.children as any).props.type === 'tutorial') {
       const className = props.children.props.className || ''
       const code = props.children.props.children.trim() || ''
-      const language = className.replace(/language/, '')
+      const language = className.replace(/language-/, '')
       return (
         <TutorialCodeBlock
           language={language}
@@ -99,15 +104,15 @@ export const MDXComponents = {
   td: TData,
   a: Anchor,
   p: (props: HTMLChakraProps<'p'>) => <chakra.p apply='mdx.p' {...props} />,
-  ul: (props: HTMLChakraProps<'ul'>) => <chakra.ul apply='mdx.ul' {...props} />,
-  ol: (props: HTMLChakraProps<'ol'>) => <chakra.ol apply='mdx.ul' {...props} />,
+  ul: (props: HTMLChakraProps<'ul'>) => <chakra.ul apply='mdx.ul' {...props} />, ol: (props: HTMLChakraProps<'ol'>) => <chakra.ol apply='mdx.ul' {...props} />,
   li: (props: HTMLChakraProps<'li'>) => <chakra.li pb='4px' {...props} />,
   blockquote: (props) => (
     <Alert
-      as='blockquote'
       mt='4'
       role='none'
       status='warning'
+      as='blockquote'
+      rounded='4px'
       variant='left-accent'
       my='1.5rem'
       {...props}
@@ -116,6 +121,21 @@ export const MDXComponents = {
   'carbon-ad': CarbonAd,
   ComponentLinks,
   IconList,
-  // TODO: continue with this
-  // PropsTable,
+  PropsTable,
+  FrameworkLinks,
+  VideoPlayer,
+  AspectRatio,
+  ColorPalette,
+  ColorPalettes,
+  ColorWrapper,
+  FeaturesCourses,
+  JoinCommunityCards,
+  SandpackEmbed: (props: SandpackEmbedProps) => (
+    <Box my={6}>
+      <SandpackEmbed {...props} />
+    </Box>
+  ),
+  FeaturesOverview,
+  TutorialFileAction,
+  PackageManagers,
 }
