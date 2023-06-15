@@ -17,7 +17,7 @@ const nextConfig = {
       'res.cloudinary.com',
     ],
   },
-  productionBrowserSourceMaps: true,
+  productionBrowserSourceMaps: false,
   redirects: require('./next-redirect'),
   reactStrictMode: true,
 }

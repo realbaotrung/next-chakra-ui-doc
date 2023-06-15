@@ -35,14 +35,13 @@ export const ColorPalette = ({ color, name, ...rest }: ColorPaletteProps) => {
         boxShadow='inner'
         mr={3}
         bgColor={color}
-      >
+      />
         <Box fontSize='sm'>
           <Box fontWeight='semibold' textTransform='capitalize'>
             {name}
           </Box>
           <Box textTransform='uppercase'>{colorCode}</Box>
         </Box>
-      </Box>
     </Flex>
   )
 }
@@ -58,7 +57,7 @@ export const ColorPalettes = ({ color }: ColorPalettesProps) => {
 
   return keys.map((item) => (
     <ColorPalette
-      key={`${color}.${item}`}
+        key={`${color}.${item}`}
       color={`${color}.${item}`}
       name={`${color} ${item}`}
     />
@@ -67,7 +66,7 @@ export const ColorPalettes = ({ color }: ColorPalettesProps) => {
 
 export const ColorWrapper = (props: GridProps) => (
   <Grid
-    mt={7}
+      mt={7}
     gap={6}
     templateColumns='repeat(auto-fit, minmax(200px, 1fr))'
     {...props}

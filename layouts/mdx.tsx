@@ -24,7 +24,7 @@ export function getRoutes(slug: string): RouteItem[] {
     '/docs/styled-system': styledSystemSidebar,
     '/docs/hooks': hooksSidebar,
     '/docs/components': componentsSidebar,
-    '/tutorials': tutorialSidebar,
+    '/tutorial': tutorialSidebar,
     '/community': communitySidebar,
     '/figma': figmaSidebar,
   }

@@ -1,14 +1,17 @@
 export type MixedArray = string | Array<string | string[]>
 
+/** Convert any input to flatted array */
 export function toArray(slug: MixedArray) {
   const res = Array.isArray(slug) ? slug.flat() : [slug]
-  return res.filter(Boolean) // only return array that have value(s)
+  return res.filter(Boolean) // only return flatted array that have value(s)
 }
 
+/** Create a unique set */
 export function uniq<T>(c: T[]) {
   return [...new Set(c)]
 }
 
+/** Capitalize the element of a string */
 export function capitalize(str: string) {
   return str[0].toUpperCase() + str.slice(1)
 }

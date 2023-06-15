@@ -1,14 +1,14 @@
+/* eslint-disable no-debugger */
 import { MDXComponents } from 'components/mdx-components/mdx-components'
-import { Guide, allGuides } from 'contentlayer/generated'
 import MDXLayout from 'layouts/mdx'
 import { GetStaticPaths, InferGetStaticPropsType, GetStaticProps } from 'next'
-import { toArray } from 'utils/js-utils'
 import { useMDXComponent } from 'next-contentlayer/hooks'
+import { getDocByType, getDocDoc } from 'utils/contentlayer-utils'
 
 export default function Page({
   doc,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
-  const Component = useMDXComponent(doc.body.code)
+  const Component = useMDXComponent(doc?.body?.code)
   return (
     <MDXLayout frontmatter={doc.frontMatter}>
       <Component components={MDXComponents as any} />
@@ -17,23 +17,16 @@ export default function Page({
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = allGuides
-    .map((t) => t._id.replace('getting-started/', '').replace('.mdx', ''))
-    .map((id) => ({ params: { slug: id === 'index' ? [] : id.split('/') } }))
+  const paths = getDocByType('styled-system').map((doc) => ({
+    params: {
+      slug: doc.slug.split('/').slice(3),
+    },
+  }))
   return { paths, fallback: false }
 }
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
   const slug = ctx.params.slug
-  const params = toArray(slug)
-
-  let doc: Guide
-  if (params.length === 0) {
-    doc = allGuides.find((t) => t._id === 'getting-started/index.mdx')
-  } else {
-    doc = allGuides.find((guide) =>
-      guide._id.endsWith(`${params.join('/')}.mdx`),
-    )
-  }
+  const doc = getDocDoc(['styled-system', slug])
   return { props: { doc } }
 }

@@ -1,7 +1,7 @@
 import { Box, BoxProps, chakra } from '@chakra-ui/react'
 import { useState } from 'react'
 import { LiveEditor, LiveError, LivePreview, LiveProvider } from 'react-live'
-import ReactLiveScope from './react-live-scope'
+import scope from './react-live-scope'
 import { t } from 'utils/i18n'
 import { liveEditorStyle, liveErrorStyle } from './style'
 import CodeContainer from './code-container'
@@ -48,13 +48,13 @@ export default function ReactLiveBlock({
   editable,
   rawCode,
   ...rest
-}: { editable: boolean; rawCode: string } & Record<string, any>) {
+}) {
   const code = rawCode.trim().replace('// prettier-ignore', '')
   const [editorCode, setEditorCode] = useState<string>(code.trim())
   const onChange = (newCode: string) => setEditorCode(newCode.trim())
   const liveProviderProps = {
     code: editorCode,
-    scope: ReactLiveScope,
+    scope,
     ...rest,
   }
   return (
@@ -62,7 +62,7 @@ export default function ReactLiveBlock({
       <LiveCodePreview zIndex={Z_INDEX_LIVE_CODE_PREVIEW} />
       <Box position='relative' zIndex='0'>
         {editable && (
-          <CodeContainer>
+          <CodeContainer padding='5'>
             <LiveEditor onChange={onChange} style={liveEditorStyle} />
           </CodeContainer>
         )}

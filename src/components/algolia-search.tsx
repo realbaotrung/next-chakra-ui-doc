@@ -112,76 +112,76 @@ export const SearchButton = forwardRef(
   },
 )
 
-function AlgoliaSearch() {
-  const router = useRouter()
-  const [isOpen, setIsOpen] = useState(false)
-  const searchButtonRef = useRef()
-  const [initialQuery, setInitialQuery] = useState(null)
+// function AlgoliaSearch() {
+//   const router = useRouter()
+//   const [isOpen, setIsOpen] = useState(false)
+//   const searchButtonRef = useRef()
+//   const [initialQuery, setInitialQuery] = useState(null)
 
-  const onOpen = useCallback(() => {
-    setIsOpen(true)
-  }, [setIsOpen])
+//   const onOpen = useCallback(() => {
+//     setIsOpen(true)
+//   }, [setIsOpen])
 
-  const onClose = useCallback(() => {
-    setIsOpen(false)
-  }, [setIsOpen])
+//   const onClose = useCallback(() => {
+//     setIsOpen(false)
+//   }, [setIsOpen])
 
-  const onInput = useCallback(
-    (event) => {
-      setIsOpen(false)
-      setInitialQuery(event.key)
-    },
-    [setIsOpen],
-  )
+//   const onInput = useCallback(
+//     (event) => {
+//       setIsOpen(false)
+//       setInitialQuery(event.key)
+//     },
+//     [setIsOpen],
+//   )
 
-  useDocSearchKeyboardEvents({
-    isOpen,
-    onOpen,
-    onClose,
-    onInput,
-    searchButtonRef,
-  })
+//   useDocSearchKeyboardEvents({
+//     isOpen,
+//     onOpen,
+//     onClose,
+//     onInput,
+//     searchButtonRef,
+//   })
 
-  return (
-    <>
-      <Head>
-        <link
-          rel='preconnect'
-          href='https://BH4D9OD16A-dsn.algolia.net'
-          // crossOrigin='true'
-        />
-      </Head>
-      <SearchStyle />
-      <SearchButton onClick={onOpen} ref={searchButtonRef} />
-      {isOpen && (
-        <Portal>
-          <DocSearchModal
-            placeholder='Search the docs'
-            initialQuery={initialQuery}
-            initialScrollY={window.scrollY}
-            onClose={onClose}
-            indexName='chakra-ui'
-            apiKey={ALGOLIA_API_KEY}
-            appId={ALGOLIA_APP_ID}
-            navigator={{
-              navigate({ itemUrl: suggestionUrl }) {
-                setIsOpen(false)
-                router.push(suggestionUrl)
-              },
-            }}
-            hitComponent={Hit}
-            transformItems={(items) => {
-              return items.map((item) => {
-                const a = document.createElement('a')
-                a.href = item.url
-                const hash = a.hash === '#content-wrapper' ? '' : a.hash
-                item.url = `${a.pathname}${hash}`
-                return item
-              })
-            }}
-          />
-        </Portal>
-      )}
-    </>
-  )
-}
+//   return (
+//     <>
+//       <Head>
+//         <link
+//           rel='preconnect'
+//           href='https://BH4D9OD16A-dsn.algolia.net'
+//           // crossOrigin='true'
+//         />
+//       </Head>
+//       <SearchStyle />
+//       <SearchButton onClick={onOpen} ref={searchButtonRef} />
+//       {isOpen && (
+//         <Portal>
+//           <DocSearchModal
+//             placeholder='Search the docs'
+//             initialQuery={initialQuery}
+//             initialScrollY={window.scrollY}
+//             onClose={onClose}
+//             indexName='chakra-ui'
+//             apiKey={ALGOLIA_API_KEY}
+//             appId={ALGOLIA_APP_ID}
+//             navigator={{
+//               navigate({ itemUrl: suggestionUrl }) {
+//                 setIsOpen(false)
+//                 router.push(suggestionUrl)
+//               },
+//             }}
+//             hitComponent={Hit}
+//             transformItems={(items) => {
+//               return items.map((item) => {
+//                 const a = document.createElement('a')
+//                 a.href = item.url
+//                 const hash = a.hash === '#content-wrapper' ? '' : a.hash
+//                 item.url = `${a.pathname}${hash}`
+//                 return item
+//               })
+//             }}
+//           />
+//         </Portal>
+//       )}
+//     </>
+//   )
+// }

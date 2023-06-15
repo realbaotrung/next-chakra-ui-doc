@@ -16,9 +16,7 @@ export type SandpackEmbedProps = {
   layoutOptions?: SandpackLayoutProps
   editorOptions?: CodeEditorProps
   previewOptions?: PreviewProps & BoxProps
-  files: {
-    [x: string]: string
-  }
+  files: Record<string, string>
   isHorizontal?: boolean
 }
 

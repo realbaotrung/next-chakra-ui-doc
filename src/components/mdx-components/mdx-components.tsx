@@ -92,7 +92,7 @@ export const MDXComponents = {
     return <CodeBlock {...props} />
   },
   kbd: Kbd, // keyboard shortcut component
-  br: ({ reset, ...props }) => (
+  br: ({ reset, ...props }: { reset: any } & HTMLChakraProps<'br'>) => (
     <Box
       as={reset ? 'br' : undefined}
       height={reset ? undefined : '24px'}
@@ -104,9 +104,10 @@ export const MDXComponents = {
   td: TData,
   a: Anchor,
   p: (props: HTMLChakraProps<'p'>) => <chakra.p apply='mdx.p' {...props} />,
-  ul: (props: HTMLChakraProps<'ul'>) => <chakra.ul apply='mdx.ul' {...props} />, ol: (props: HTMLChakraProps<'ol'>) => <chakra.ol apply='mdx.ul' {...props} />,
+  ul: (props: HTMLChakraProps<'ul'>) => <chakra.ul apply='mdx.ul' {...props} />,
+  ol: (props: HTMLChakraProps<'ol'>) => <chakra.ol apply='mdx.ul' {...props} />,
   li: (props: HTMLChakraProps<'li'>) => <chakra.li pb='4px' {...props} />,
-  blockquote: (props) => (
+  blockquote: (props: Chakra.AlertProps) => (
     <Alert
       mt='4'
       role='none'
